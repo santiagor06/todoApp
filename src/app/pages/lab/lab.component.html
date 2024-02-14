@@ -1,7 +1,30 @@
-<h1>Hola soy {{nombre}}</h1>
+<div class="container">
+  <h1>Hola soy {{nombre()}}</h1>
 <h2>Tareas</h2>
 <ul>
-  <li *ngFor="let task of tasks" >
+  <li *ngFor="let task of tasks()" >
     {{task}}
   </li>
 </ul>
+<hr>
+<h4>{{user.name}}</h4>
+<img [src]="user.avatar" alt="">
+<hr>
+<button (click)="handeClick()">Alertaa</button>
+<p>change</p>
+<input type="number" (change)="handleChange($event)" [value]="user.age">
+<p>Keydown</p>
+<input type="text" (keydown)="handleChange($event)">
+<p>Keydown shift + t</p>
+<input type="text" (keydown.shift.t)="handeClick()">
+<h3>Signals</h3>
+<input type="text" (keydown)="handleSignal($event)">
+<h4>{{nombre()}}</h4>
+<hr>
+<ul>
+  <li *ngFor="let task of tasks();index as i" >
+   {{i}}-{{task}}
+  </li>
+</ul>
+</div>
+
