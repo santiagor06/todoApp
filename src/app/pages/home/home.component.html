@@ -24,11 +24,11 @@
           </div>
           <input class="edit" value="Learn JavaScript" />
         </li> -->
-        <li *ngFor="let task of tasks();index as i">
+        <li *ngFor="let task of tasks()">
           <div class="view">
             <input class="toggle" type="checkbox" />
-            <label>{{task}}</label>
-            <button class="destroy" (click)="deleteTak(i)"></button>
+            <label>{{task.title}}</label>
+            <button class="destroy" (click)="deleteTak(task.id)"></button>
           </div>
           <input class="edit" value="Buy a unicorn" />
         </li>

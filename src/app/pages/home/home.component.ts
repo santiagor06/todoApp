@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { ITask } from '../../models/Taks.model';
 
 @Component({
   selector: 'app-home',
@@ -10,16 +11,28 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  tasks = signal(['Comer', 'Correr', 'Estudiar', 'Dormir']);
+  tasks = signal<ITask[]>([
+    {
+      id: Date.now(),
+      title: 'Comer',
+      completed: false,
+    },
+  ]);
+  private createTask(title: string): ITask {
+    return {
+      id: Date.now(),
+      title,
+      completed: false,
+    };
+  }
   addTask(event: Event) {
     let input = event.target as HTMLInputElement;
     let { value } = input;
-    this.tasks.update((tasks) => [...tasks, value]);
+    let newTask = this.createTask(value);
+    this.tasks.update((tasks) => [...tasks, newTask]);
     input.value = '';
   }
-  deleteTak(index: number) {
-    this.tasks.update((tasks) =>
-      tasks.filter((task, position) => position != index)
-    );
+  deleteTak(id: number) {
+    this.tasks.update((tasks) => tasks.filter((task) => task.id != id));
   }
 }
