@@ -11,4 +11,15 @@ import { RouterOutlet } from '@angular/router';
 })
 export class HomeComponent {
   tasks = signal(['Comer', 'Correr', 'Estudiar', 'Dormir']);
+  addTask(event: Event) {
+    let input = event.target as HTMLInputElement;
+    let { value } = input;
+    this.tasks.update((tasks) => [...tasks, value]);
+    input.value = '';
+  }
+  deleteTak(index: number) {
+    this.tasks.update((tasks) =>
+      tasks.filter((task, position) => position != index)
+    );
+  }
 }
