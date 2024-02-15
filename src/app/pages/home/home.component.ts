@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, computed, effect, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { ITask } from '../../models/Taks.model';
 import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Filters } from '../../models/Filters.models';
 
 @Component({
   selector: 'app-home',
@@ -12,6 +13,19 @@ import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
+  constructor() {
+    effect(() => {
+      let tasks = this.tasks();
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    });
+  }
+  ngOnInit() {
+    let storage = localStorage.getItem('tasks');
+    if (storage) {
+      this.tasks.set(JSON.parse(storage));
+    }
+  }
+  updateStorage() {}
   inputTaskControl = new FormControl('', {
     nonNullable: true,
     validators: [Validators.required],
@@ -20,19 +34,26 @@ export class HomeComponent {
     nonNullable: true,
     validators: [Validators.required],
   });
-  tasks = signal<ITask[]>([
-    {
-      id: Date.now(),
-      title: 'Comer',
-      completed: false,
-    },
-  ]);
+  tasks = signal<ITask[]>([]);
+  filter = signal<'all' | 'pending' | 'completed'>('all');
+  filterTasks = computed(() => {
+    let tasks = this.tasks();
+    let filter = this.filter();
+    if (filter == Filters.PENDING) {
+      return tasks.filter((task) => !task.completed);
+    } else if (filter == Filters.COMPLETED) {
+      return tasks.filter((task) => task.completed);
+    } else return tasks;
+  });
   private createTask(title: string): ITask {
     return {
       id: Date.now(),
       title,
       completed: false,
     };
+  }
+  handleFilter(filter: 'all' | 'pending' | 'completed') {
+    this.filter.set(filter);
   }
   addTask() {
     if (this.inputTaskControl.valid) {
