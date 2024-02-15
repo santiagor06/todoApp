@@ -7,12 +7,12 @@
   </li>
 </ul>
 <hr>
-<h4>{{user.name}}</h4>
-<img [src]="user.avatar" alt="">
+<h4>{{user().name}}</h4>
+<img [src]="user().avatar" alt="">
 <hr>
 <button (click)="handeClick()">Alertaa</button>
 <p>change</p>
-<input type="number" (change)="handleChange($event)" [value]="user.age">
+<input type="number" (change)="handleChange($event)" [value]="user().age">
 <p>Keydown</p>
 <input type="text" (keydown)="handleChange($event)">
 <p>Keydown shift + t</p>
@@ -23,8 +23,31 @@
 <hr>
 <ul>
   <li *ngFor="let task of tasks();index as i" >
-   {{i}}-{{task}}
+    {{i}}-{{task}}
   </li>
 </ul>
+<hr>
+<input type="text" (change)="changeName($event)">
+
+<div [ngSwitch]="user().name">
+  <p *ngSwitchCase="'santiago'">Soy santiago</p>
+  <p *ngSwitchCase="'nicolas'">Soy nicolas</p>
+  <p *ngSwitchCase="'tatiana'">Soy tatiana</p>
+  <p *ngSwitchCase="'ana'">Soy ana</p>
+  <p *ngSwitchDefault>No soy nadie</p>
+</div>
+<hr>
+<input type="color" [formControl]="controlColor" />
+<p>{{controlColor.value}}</p>
+<svg>
+  <g>
+    <rect x="0" y="0" height="100" width="100" [attr.fill]="controlColor.value"/>
+  </g>
+</svg>
+<input type="number" [formControl]="widthControl">
+<div class="box" [style.backgroundColor]="controlColor.value" [style.width.px]="widthControl.value"></div>
+<hr>
+<input type="text" [formControl]="controlName">
+<p  class="message-error" [class.show]="controlName.invalid && controlName.touched">Error en el campo</p>
 </div>
 
